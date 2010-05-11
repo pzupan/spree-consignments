@@ -1,0 +1,10 @@
+---
+en-US:
+  consignments: "Suppliers"
+  consignment_name: "Consignment Name"
+  new_consignment: "New Consignment"
+  available_consignments: "Available Consignments"
+  editing_consignment: "Editing Consignment"
+  fax: "Fax"
+  notes: "Notes"
+  consignments_description: "Manage Consignments"

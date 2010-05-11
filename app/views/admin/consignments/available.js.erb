@@ -1,0 +1,34 @@
+<script type="text/javascript">
+  function displayRow(){
+    var row = document.getElementById("captionRow");
+    if (row.style.display == '') row.style.display = 'none';
+    else row.style.display = '';
+  }
+</script>
+<h4><%= t('available_consignments') %></h4>
+<table class="index">
+	<thead>
+		<tr>
+			<th><%= t("name") %></th>
+			<th><%= t("action") %></th>
+		</tr>
+	</thead>
+	<tbody>
+    <% @available_consignments.each do |consignment| %>
+      <tr id="<%= dom_id(consignment) %>">
+        <td><%= consignment.name %></td>
+		    <td class="actions">
+          <%= image_tag "spinner.gif", :style => "display:none", :id => "#{dom_id(consignment, :spinner)}" %>		    
+		      <%= link_to_remote icon('add') + ' ' + t('select'), 
+		                         {:url => select_admin_product_consignment_path(@product, consignment),
+		                         :loading => "jQuery('##{dom_id(consignment, :spinner)}').show()",
+		                         :update => 'selected-consignment',
+		                         :complete => "jQuery('##{dom_id(consignment)}').remove(); jQuery('##{dom_id(consignment, :spinner)}').hide();"}, :class => 'iconlink' %>
+		    </td>        
+      </tr>
+    <% end %>
+    <% if @available_consignments.empty? %>
+     <tr><td colspan="3"><%= t('no_match_found') %>.</td></tr>
+    <% end %>
+  </tbody>
+</table>

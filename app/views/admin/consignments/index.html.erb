@@ -1,0 +1,43 @@
+<%= render :partial => 'admin/shared/configuration_menu' %>
+ 
+<h1>
+	<%=t("consignment") %>
+</h1>
+<table class="admin-report" width="545">
+	<thead>
+		<tr>
+			<th>
+				<%=t("consignment_name")%>
+			</th>
+			<th>
+				<%=t("email")%>
+			</th>
+			<th>
+				<%=t("phone")%>
+			</th>
+			<th>
+				<%=t("action")%>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @consignments.each do |consignment| %>
+		<tr class="<%= cycle('even', 'odd') %>">
+			<td>
+				<%= consignment.name %>
+			</td>
+			<td>
+				<%= consignment.email %>
+			</td>
+			<td>
+				<%= consignment.phone %>
+			</td>
+			<td>
+				<%=link_to t("edit"), edit_object_url(consignment) %> | <%=link_to t("delete"), object_url(consignment), :method => :delete %>
+			</td>
+		</tr><% end %>
+	</tbody>
+</table>
+
+ 
+<%= link_to t("new_consignment"), new_object_url %>
