@@ -1,11 +1,9 @@
 # Put your extension routes here.
 
 map.namespace :admin do |admin|
-  admin.resources :consignments
-  admin.resources :products do |product|
-    product.resources :consignments, :member => {:select => :post, :remove => :post}, :collection => {:available => :post, :selected => :get}
-  end
-  admin.resources :orders do |order|
-    order.resources :consignments, :collection => {:line_items => :get}
-  end
+  admin.resources :consignments, :member =>{:add => :get, :save => :put}
+  admin.resources :consignors, :member => {:consignments => :get}
 end
+
+map.remove_consignment_admin_consignor 'admin/consignor/consignment/remove/:product_id', :controller => 'consignor', :action => 'remove_consignment'
+map.remove_consignment_admin_product 'admin/consignments/remove/:product_id', :controller => 'consignment', :action => 'remove_consignment'

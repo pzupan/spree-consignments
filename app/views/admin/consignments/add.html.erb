@@ -1,0 +1,12 @@
+<%= render :partial => 'admin/shared/product_sub_menu' %>
+<%= render :partial => 'admin/shared/product_tabs', :locals => {:current => "Consignment"} %>
+
+<%= error_messages_for :consignment %>
+
+<% form_for(@consignment, :url => save_admin_consignment_url, :html => { :method => :put }) do |f| -%>
+  <%= hidden_field_tag 'product_id', @product.id %>
+  <%= render :partial => "form", :locals => { :f => f } %>
+  <p>
+    <%=submit_tag t("update")%> or <%= link_to t("cancel"), edit_admin_product_path(@product.id)%>
+  </p>
+<% end %>

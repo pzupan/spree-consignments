@@ -1,0 +1,68 @@
+<h1><%= "#{t("actions.listing")} #{t("consignors")}" %></h1>
+
+<table class="index" width="545">
+	<thead>
+		<tr>
+			<th>
+				<%=t("consignor_name")%>
+			</th>
+			<th>
+				<%=t("email")%>
+			</th>
+			<th>
+				<%=t("phone")%>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr class="<%= cycle('even', 'odd') %>">
+			<td>
+				<%= @consignor.first_name %> <%= @consignor.last_name %>  
+			</td>
+			<td>
+				<%= @consignor.email %>
+			</td>
+			<td>
+				<%= @consignor.phone %>
+			</td>
+		</tr>
+	</tbody>
+</table>
+<h1>
+	<%=t("consignments") %>
+</h1>
+<table class="index">
+	<% unless @consignments.blank? %>
+   		<% @consignments.each do |consignment| %>
+  			<thead>
+  				<tr>
+  					<th><%= t("consignment_number") %>: <%= consignment.id %></th>
+  					<th><%= t("on_hand") %></th>
+  					<th><%= t("commission") %></th>
+  					<th><%= t("paid") %></th>
+  					<th><%= t("action") %></th>
+  				</tr>
+  			</thead>
+  			<tbody>
+      		<% consignment.products.each do |product| %>
+	      		<tr class="<%= cycle('even', 'odd') %>" id="<%= dom_id(product, :sel)%>">
+    	    		<td><%= product.name %></td>
+    	    		<td><%= product.count_on_hand %></td>
+        			<td><%= consignment.commission %>%</td>
+        			<td><%= consignment.paid ? t("yes") : t("no") %></td>
+  	    			<td>
+          				<%= image_tag "spinner.gif", :style => "display:none", :id => "#{dom_id(product, :rem_spinner)}" %>		                         
+		      			<%= link_to_remote icon('delete') + ' ' + t('delete'), 
+		                         :url => {:action => "remove_consignment", :product_id => product.id},
+		                         :loading => "jQuery('##{dom_id(product, :rem_spinner)}').show()",
+		                         :update => 'consignments',
+		                         :complete => "jQuery('##{dom_id(product, :sel)}').remove(); jQuery('##{dom_id(product, :rem_spinner)}').hide();", 
+		                         :html => {:class => 'iconlink'} %></td>        
+      			</tr>
+      		<% end %>
+      	<% end %>
+    <% else %>
+    	<tr><td colspan="3"> <%= t('none') %>.</td></tr>
+    <% end %>
+  </tbody>
+</table>

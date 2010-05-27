@@ -1,43 +1,42 @@
-<%= render :partial => 'admin/shared/configuration_menu' %>
- 
-<h1>
-	<%=t("consignment") %>
-</h1>
-<table class="admin-report" width="545">
-	<thead>
-		<tr>
-			<th>
-				<%=t("consignment_name")%>
-			</th>
-			<th>
-				<%=t("email")%>
-			</th>
-			<th>
-				<%=t("phone")%>
-			</th>
-			<th>
-				<%=t("action")%>
-			</th>
-		</tr>
-	</thead>
-	<tbody>
-		<% @consignments.each do |consignment| %>
-		<tr class="<%= cycle('even', 'odd') %>">
-			<td>
-				<%= consignment.name %>
-			</td>
-			<td>
-				<%= consignment.email %>
-			</td>
-			<td>
-				<%= consignment.phone %>
-			</td>
-			<td>
-				<%=link_to t("edit"), edit_object_url(consignment) %> | <%=link_to t("delete"), object_url(consignment), :method => :delete %>
-			</td>
-		</tr><% end %>
-	</tbody>
-</table>
+<%= render :partial => 'admin/shared/product_sub_menu' %>
 
- 
-<%= link_to t("new_consignment"), new_object_url %>
+<h1><%= "#{t("actions.listing")} #{t("consignments")}" %></h1>
+
+<table class="index">
+	<% unless @products.blank? %>
+		<% consignment_id = 0 %>
+   		<% @products.each do |product| %>
+   			<% unless consignment_id == product.consignment_id %>
+	  			<thead>
+  					<tr>
+  						<th><%= t("consignment_number") %>: <%= product.consignment_id %></th>
+  						<th><%= t("on_hand") %></th>
+  						<th><%= t("commission") %></th>
+  						<th><%= t("paid") %></th>
+	  					<th><%= t("action") %></th>
+  					</tr>
+  				</thead>
+  			<% end %>
+  			<% consignment_id = product.consignment_id %>
+  			<tbody>
+      		<tr class="<%= cycle('even', 'odd') %>" id="<%= dom_id(product, :sel)%>">
+   	    		<td><%= product.name %></td>
+   	    		<td><%= product.count_on_hand %></td>
+       			<td><%= product.consignment.commission %>%</td>
+       			<td><%= product.consignment.paid ? t("yes") : t("no") %></td>
+    			<td>
+       				<%= image_tag "spinner.gif", :style => "display:none", :id => "#{dom_id(product, :rem_spinner)}" %>		                         
+	      			<%= link_to_remote icon('delete') + ' ' + t('delete'), 
+	                         :url => {:action => "remove_consignment", :product_id => product.id},
+	                         :loading => "jQuery('##{dom_id(product, :rem_spinner)}').show()",
+	                         :update => 'consignments',
+	                         :complete => "jQuery('##{dom_id(product, :sel)}').remove(); jQuery('##{dom_id(product, :rem_spinner)}').hide();", 
+	                         :html => {:class => 'iconlink'} %></td>        
+   			</tr>
+      	<% end %>
+    <% else %>
+    	<tr><td colspan="3"> <%= t('none') %>.</td></tr>
+    <% end %>
+  </tbody>
+</table>
+ <%= will_paginate(@products, :previous_label => "&#171; #{t('previous')}", :next_label => "#{t('next')} &#187;") %>

@@ -1,10 +1,22 @@
 ---
-en-US:
-  consignments: "Suppliers"
+en-US: 
+  consignors: "Consignors"
+  consignor: "Consignor"
+  consignor_name: "Consignor Name"
+  new_consignor: "New Consignor"
+  editing_consignor: "Editing Consignor"
+  consignments: "Consignments"
+  consignment: "Consignment"
   consignment_name: "Consignment Name"
+  consignment_number: "Consignment Number"
   new_consignment: "New Consignment"
   available_consignments: "Available Consignments"
   editing_consignment: "Editing Consignment"
+  consignments_description: "Manage Consignments"
   fax: "Fax"
   notes: "Notes"
-  consignments_description: "Manage Consignments"
+  commission: "Commission"
+  notice_messages:
+    product_consignment_not_saved: "Product Consignment Not Saved"
+    product_consignment_saved: "Product Consignment Saved"
+    no_consignor_selected: "No Consignor Selected"

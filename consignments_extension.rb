@@ -14,23 +14,20 @@ class ConsignmentsExtension < Spree::Extension
   
   def activate
     
-    Admin::BaseController.class_eval do
-      before_filter :add_product_consignment_tab, :add_consignments_tab
-
-      def add_consignments_tab
-        @order_admin_tabs << {:name => t('consignments'), :url => "line_items_admin_order_consignments_url"}
-      end
-      
-      def add_product_consignment_tab
-        @product_admin_tabs << {:name => t('consignments'), :url => "selected_admin_product_consignments_url"}
-      end
-    end
-    
     Admin::ConfigurationsController.class_eval do
       before_filter :add_consignments_link, :only => :index
  
       def add_consignments_link
-        @extension_links << {:link => admin_cosignments_url, :link_text => t('consignments'), :description => t('consignment_description')}
+        @extension_links << {:link => admin_consignments_url, :link_text => t('consignments'), :description => t('consignment_description')}
+      end
+    end
+      
+    Admin::NavigationHelper.class_eval do
+      def link_to_consignor(resource)
+        link_to_with_icon('exclamation', t('consignors'), edit_object_url(resource))
+      end
+      def link_to_consignment(resource)
+        link_to_with_icon('exclamation', t('consignments'), edit_object_url(resource))
       end
     end
     
@@ -38,8 +35,12 @@ class ConsignmentsExtension < Spree::Extension
       belongs_to :consignment
     end
     
+    User.class_eval do 
+      has_many :consignors
+    end
+    
     State.class_eval do
-      has_many :consignments
+      has_many :consignors
     end
 
   end

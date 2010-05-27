@@ -1,0 +1,51 @@
+<%= render :partial => 'admin/shared/configuration_menu' %>
+<div class='toolbar'>
+  <ul class='actions'>
+    <li id="new_ot_link">
+      <%= button_link_to t("new_consignor"), new_object_url, {:icon => 'add'} %>
+    </li>
+  </ul>
+  <br class='clear' />
+</div>
+
+<h1><%= "#{t("actions.listing")} #{t("consignors")}" %></h1>
+
+<table class="index" width="545">
+	<thead>
+		<tr>
+			<th>
+				<%=t("consignor_name")%>
+			</th>
+			<th>
+				<%=t("email")%>
+			</th>
+			<th>
+				<%=t("phone")%>
+			</th>
+			<th>
+				<%=t("action")%>
+			</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @consignors.each do |consignor| %>
+		<tr class="<%= cycle('even', 'odd') %>" id="<%= dom_id consignor %>" >
+			<td>
+				<%= consignor.first_name %> <%= consignor.last_name %>  
+			</td>
+			<td>
+				<%= consignor.email %>
+			</td>
+			<td>
+				<%= consignor.phone %>
+			</td>
+			<td>
+				<%= link_to_edit consignor %> | 
+				<%= link_to_with_icon 'exclamation', t("consignments"), consignments_admin_consignor_path(consignor.id) %> |
+				<%= link_to_delete consignor %>
+			</td>
+		</tr><% end %>
+	</tbody>
+</table>
+ <%= will_paginate(:previous_label => "&#171; #{t('previous')}", :next_label => "#{t('next')} &#187;") %>
+ 
