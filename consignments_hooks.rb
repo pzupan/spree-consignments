@@ -15,5 +15,5 @@ class ConsignmentsHooks < Spree::ThemeSupport::HookListener
            '<%= link_to t("consignment"),  add_admin_consignment_url(@product.id) %></li>'+
     '<% end %>'
   end
-
+  
 end

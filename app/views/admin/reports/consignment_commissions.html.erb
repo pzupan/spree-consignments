@@ -1,0 +1,67 @@
+<% group_name = "" %>
+<% group_item_total = 0 %>
+<% group_commission_total = 0 %>
+
+<h1><%= t("consignment_commissions") %> </h1>
+
+<table class="admin-report">
+  	<tbody>
+    	<tr>
+    		<th><%= t("consignment") %></th>
+    		<th><%= t("consignor") %></th>
+	    	<th><%= t("completed_at") %></th>
+    		<th><%= t("activerecord.attributes.product.name") %></th>
+    		<th><%= t("activerecord.attributes.line_item.quantity") %> </th>
+	    	<th><%= t("activerecord.attributes.line_item.price") %> </th>
+	    	<th><%= t("total") %> </th>
+    		<th><%= t("commission") %> </th>
+		</tr>
+		<% @line_items.each do |item| %>
+			<% group_name = item.last_name + item.first_name if group_name == "" %>
+
+			<% if group_name != item.last_name + item.first_name %>
+				<tr>
+				    <td colspan="4"></td>
+					<td colspan="2"><b><%= t("consignor_total") %>: <%= number_to_currency group_item_total %></b></td>
+			      	<td colspan="2"><b><%= t("commission_total") %>: <%= number_to_currency group_commission_total %></b></td>
+				</tr>
+				<% group_name = item.last_name + item.first_name %>
+				<% group_item_total = 0 %>
+				<% group_commission_total = 0 %>
+			<% end %>
+			<tr>
+				<td><%= item.id.to_s %></td>
+				<td><%= item.first_name + ' ' + item.last_name %></td>
+				<td><%= item.completed_at.to_date %></td>
+				<td><%= item.name %></td>
+				<td><%= item.quantity %></td>
+				<td><%= number_to_currency item.price %></td>
+				<td><%= number_to_currency (item.quantity * item.price) %>
+				<td><%= number_to_currency (item.quantity * (item.price * (item.commission.to_f / 100))) %></td>
+			</tr>
+			<% group_item_total += (item.quantity * item.price) %>
+			<% group_commission_total += (item.quantity * (item.price * (item.commission.to_f / 100))) %>
+		<% end %>    
+		<tr>
+		    <td colspan="4"></td>
+			<td colspan="2"><b><%= t("consignor_total") %>: <%= number_to_currency group_item_total %></b></td>
+	      	<td colspan="2"><b><%= t("commission_total") %>: <%= number_to_currency group_commission_total %></b></td>
+		</tr>
+	</tbody>
+</table>  
+    
+<table class="admin-report">
+  <tbody>
+  	<tr>
+		<th scope="row"><%= t("consignors_total") %>:</th>
+      	<td align="right"><%=number_to_currency @item_total%></td>
+      	<th scope="row"><%= t("commission_total") %>:</th>
+      	<td align="right"><%=number_to_currency @commission_total%></td>
+    </tr>
+  </tbody>
+</table>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'admin/shared/report_criteria', :locals => {} %>
+<% end %>
+
