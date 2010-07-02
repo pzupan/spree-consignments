@@ -6,7 +6,7 @@ This extension adds consignment functionality to Spree.  It allows you to assign
 Installation
 ============
 
-1. Install Spree (Requires 0.10.0 or greater).
+1. Install Spree (Requires 0.11.0 or greater).
 
 2. Install this extension
 
